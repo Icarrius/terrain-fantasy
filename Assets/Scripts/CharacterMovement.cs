@@ -8,17 +8,21 @@ public class CharacterMovement : MonoBehaviour
     // —оздали переменную с CharacterController который висит на персонаже
     private CharacterController characterController;
 
+    // —оздали переменную дл€ хранени€ аниматора
+    private Animator animator;
+
     float turnSmooth;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        /* —амые частые типа в C#: 
+        /* —амые частые типы данных в C#: 
            - int - целое число (1, 5, -1)
            - float - число с зап€той (1.2f, 2.0f, 1.3333333f)
            - bool - true/false
@@ -33,6 +37,16 @@ public class CharacterMovement : MonoBehaviour
 
         // —оздали переменную типа Vector3, кладем в неЄ значени€ горизонтальной и вертикальной оси 
         Vector3 movement = new Vector3(horizontal, 0, vertical);
+
+        if(movement.magnitude == 0)
+        {
+            // ≈сли мы не двигаемс€ - в аниматоре указываем значение false дл€ параметра IsMoving
+            animator.SetBool("IsMoving", false);
+            return;
+        }
+
+        // ≈сли мы двигаемс€ - в аниматоре указываем значение true дл€ параметра IsMoving
+        animator.SetBool("IsMoving", true);
 
         // ƒвигаем персонажа на основе нашего вектора Movement
         characterController.Move(movement * Time.deltaTime * speed);
